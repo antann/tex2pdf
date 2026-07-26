@@ -1,0 +1,14 @@
+% Testata a due colonne: chi legge un verbale cerca prima data e presenti,
+% poi il testo.
+\noindent\hrule\vspace{2mm}
+\noindent\begin{tabular}{@{}p{0.62\textwidth}p{0.34\textwidth}@{}}
+  \bfseries\titolo & \footnotesize\dataDocumento\\
+  \footnotesize\sottotitolo & \footnotesize\autore\\
+  \footnotesize\riferimento & \footnotesize\versione\\
+\end{tabular}
+\vspace{2mm}\hrule\vspace{6mm}
+
+\ifindice
+  \tableofcontents
+  \vspace{6mm}\hrule\vspace{6mm}
+\fi

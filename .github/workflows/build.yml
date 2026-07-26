@@ -1,0 +1,55 @@
+# Verifica della compilazione.
+#
+# Questo workflow viene pubblicato: gira sia nella repository privata sia in
+# quella pubblica, dove è l'unico controllo automatico che vedono i contributori.
+#
+# Non compila documenti LaTeX: servirebbe il motore, che pesa cinquanta megabyte
+# e va scaricato. Le verifiche automatiche sono scritte per non averne bisogno.
+name: Compilazione
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compila:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 18 è il minimo dichiarato nel README, 22 anticipa il prossimo LTS.
+        node: ['18', '20', '22']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+      - run: npm run verifica
+      - run: npm run build
+
+      - name: Controlla che il bundle esista
+        run: test -f dist/index.html
+
+      # Un template senza uno dei quattro file obbligatori compare nella
+      # galleria marcato come non valido: qui deve fallire, non passare zitto.
+      - name: Controlla che i template siano completi
+        run: |
+          esito=0
+          for dir in template/*/; do
+            for file in template.json preambolo.tex apertura.tex chiusura.tex; do
+              if [ ! -f "$dir$file" ]; then
+                echo "::error file=$dir::manca $file"
+                esito=1
+              fi
+            done
+          done
+          exit $esito

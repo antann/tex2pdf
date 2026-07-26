@@ -1,0 +1,38 @@
+TEX2PDF
+Copyright (c) 2026 Antonio Annunziata
+Distribuito secondo la licenza MIT, riportata in LICENSE.
+
+Questo file esiste perché il programma non è autosufficiente: scarica ed esegue
+software di terzi. Chi ridistribuisce TEX2PDF ridistribuisce anche le loro
+condizioni, e conviene che sappia quali sono.
+
+--------------------------------------------------------------------------------
+Motore di composizione
+
+  Tectonic — https://tectonic-typesetting.github.io
+  Licenza MIT.
+
+  Non è incluso nel codice sorgente. `installa-motore.bat` lo scarica dalle
+  release ufficiali del progetto e lo colloca in `motore/`, cartella non
+  versionata. Alla prima compilazione Tectonic scarica a sua volta i pacchetti
+  LaTeX richiesti dai template, che portano licenze proprie — LPPL nella
+  maggior parte dei casi — e restano nella cache in `motore/cache`.
+
+--------------------------------------------------------------------------------
+Dipendenze dell'interfaccia
+
+  React, React DOM             MIT   — https://react.dev
+  Vite                         MIT   — https://vitejs.dev
+  CodeMirror 6                 MIT   — https://codemirror.net
+  pdf.js (pdfjs-dist)          Apache-2.0 — https://mozilla.github.io/pdf.js
+
+  Vengono installate da npm e finiscono nel bundle prodotto da `npm run build`.
+  L'elenco completo, versioni comprese, è in package-lock.json.
+
+--------------------------------------------------------------------------------
+Font
+
+  Nessun font è incluso né distribuito. I template usano le famiglie PSNFSS
+  (Helvetica, Palatino, Avant Garde, Courier, Charter) che fanno parte della
+  dotazione standard di LaTeX e arrivano attraverso i pacchetti scaricati dal
+  motore.

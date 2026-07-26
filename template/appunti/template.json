@@ -1,0 +1,16 @@
+{
+  "nome": "Appunti",
+  "descrizione": "Note di lavoro e verbali. Tutto a spaziatura fissa, nessun colore, filetti sottili.",
+  "specifiche": "Courier · 10 pt · margini 18/18 mm",
+  "accento": "#16181d",
+  "classe": "article",
+  "opzioniClasse": [
+    "10pt"
+  ],
+  "supporta": {
+    "indice": true,
+    "copertina": false,
+    "fronteRetro": true,
+    "piede": true
+  }
+}

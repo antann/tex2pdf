@@ -1,0 +1,27 @@
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Nel Markdown due spazi in fondo alla riga sono un a capo: toglierli
+# cambierebbe il documento.
+[*.md]
+trim_trailing_whitespace = false
+
+# I file batch li esegue il prompt dei comandi, che vuole i suoi fine riga.
+[*.bat]
+end_of_line = crlf
+
+# Nei sorgenti TeX lo spazio in fondo alla riga può essere significativo dentro
+# una macro, e l'indentazione dei preamboli segue la struttura delle graffe.
+[*.tex]
+trim_trailing_whitespace = false
+
+[*.{yml,yaml,json}]
+indent_size = 2

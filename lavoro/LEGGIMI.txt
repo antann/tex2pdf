@@ -1,0 +1,2 @@
+Cartella di lavoro: qui finiscono i file temporanei della compilazione e le
+immagini trascinate sull'interfaccia. Si puo' svuotare in qualunque momento.

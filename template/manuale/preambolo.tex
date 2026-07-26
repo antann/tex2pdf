@@ -1,0 +1,71 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% Template «manuale» — preambolo.
+% Non caricare babel e non toccare tocdepth: se ne occupa opzioni.tex.
+% ─────────────────────────────────────────────────────────────────────────────
+
+\usepackage[T1]{fontenc}
+\usepackage{avant}
+\usepackage{helvet}
+\usepackage{courier}
+\renewcommand{\familydefault}{\sfdefault}
+% avant e helvet si contendono \sfdefault: vince l'ultimo caricato, quindi il
+% corpo resta in Helvetica e Avant Garde si richiama a mano nei titoli.
+\newcommand{\fonttitolo}{\fontfamily{pag}\selectfont}
+
+\usepackage{geometry}
+\geometry{left=24mm,right=24mm,top=20mm,bottom=22mm,headsep=7mm,footskip=12mm}
+
+\usepackage{xcolor}
+\definecolor{accento}{HTML}{C8571B}
+\definecolor{grafite}{HTML}{201C19}
+\definecolor{fumo}{HTML}{6E645C}
+\definecolor{nebbia}{HTML}{F6F0E9}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+% Le procedure si leggono per passi: gli elenchi numerati sono l'ossatura del
+% documento, non un ornamento, e stanno larghi.
+\setlist[enumerate]{itemsep=6pt,parsep=2pt,topsep=6pt,leftmargin=*}
+\setlist[itemize]{itemsep=3pt,parsep=0pt,topsep=5pt,leftmargin=*}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{nebbia},
+  frame=single, rulecolor=\color{accento!45},
+  framesep=8pt, xleftmargin=4pt, framexleftmargin=4pt,
+  keywordstyle=\color{accento}\bfseries,
+  commentstyle=\color{fumo}\itshape,
+  breaklines=true, showstringspaces=false
+}
+
+\usepackage{titlesec}
+\titleformat*{\subsection}{\fonttitolo\normalsize\bfseries\color{accento}}
+\titleformat*{\subsubsection}{\fonttitolo\normalsize\bfseries\color{grafite}}
+\titlespacing*{\section}{0pt}{16pt}{7pt}
+% La barra piena sul titolo di sezione è il segnale di «nuovo passo della
+% procedura»: si deve riconoscere sfogliando, senza leggere.
+% titlesec passa il titolo come argomento all'ultimo comando del blocco: si
+% scrive \barratitolo senza #1, o TeX protesta per un parametro fuori posto.
+\newcommand{\barratitolo}[1]{%
+  \colorbox{accento}{\parbox{\dimexpr\textwidth-2\fboxsep}{%
+    \vspace{2pt}\thesection\quad#1\vspace{2pt}}}}
+\titleformat{\section}[block]{\fonttitolo\large\bfseries\color{white}}{}{0pt}{\barratitolo}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\color{fumo}\titolo}
+\fancyhead[R]{\footnotesize\color{fumo}\versione}
+\fancyfoot[L]{\footnotesize\color{fumo}\piede}
+\fancyfoot[R]{\footnotesize\bfseries\color{accento}\thepage}
+
+\linespread{1.10}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+
+\usepackage[colorlinks=true,linkcolor=accento,urlcolor=accento,citecolor=accento]{hyperref}
+\hypersetup{pdftitle={\titolo},pdfauthor={\autore}}

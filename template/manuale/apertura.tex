@@ -1,0 +1,27 @@
+\ifcopertina
+  \begin{titlepage}
+    \noindent\colorbox{accento}{\parbox{\dimexpr\textwidth-2\fboxsep}{\vspace{4mm}\color{white}
+      {\footnotesize\MakeUppercase{\ente}}\par\vspace{14mm}
+      {\Huge\bfseries\titolo}\par\vspace{3mm}
+      {\large\sottotitolo}\par\vspace{6mm}}}
+    \par\vspace{14mm}
+    \noindent\begin{tabular}{@{}ll@{}}
+      \footnotesize\color{fumo}Autore & \footnotesize\autore\\
+      \footnotesize\color{fumo}Data & \footnotesize\dataDocumento\\
+      \footnotesize\color{fumo}Versione & \footnotesize\versione\\
+      \footnotesize\color{fumo}Riferimento & \footnotesize\riferimento\\
+    \end{tabular}
+    \vfill
+  \end{titlepage}
+\else
+  \noindent\colorbox{accento}{\parbox{\dimexpr\textwidth-2\fboxsep}{\vspace{2mm}\color{white}
+    {\LARGE\bfseries\titolo}\par\vspace{2mm}{\normalsize\sottotitolo}\par\vspace{2mm}}}
+  \par\vspace{3mm}
+  \noindent{\footnotesize\color{fumo}\autore\ \textbullet\ \dataDocumento\ \textbullet\ \versione}
+  \par\vspace{8mm}
+\fi
+
+\ifindice
+  \tableofcontents
+  \clearpage
+\fi

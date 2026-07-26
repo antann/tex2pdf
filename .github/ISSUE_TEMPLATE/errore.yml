@@ -1,0 +1,81 @@
+name: Segnalazione di un errore
+description: Qualcosa non funziona come dovrebbe.
+labels: ['errore']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Prima di aprire la segnalazione, controlla la sezione **Quando qualcosa
+        non va** del README: motore assente, prima compilazione lenta e
+        pacchetti che non si scaricano sono comportamenti già documentati.
+
+        Se l'errore compare nel registro con origine *corpo*, viene dal tuo
+        documento: il programma sta riportando fedelmente quello che dice TeX.
+
+  - type: textarea
+    id: cosa-succede
+    attributes:
+      label: Che cosa succede
+      description: Descrivi il difetto e che cosa ti aspettavi invece.
+    validations:
+      required: true
+
+  - type: textarea
+    id: riproduzione
+    attributes:
+      label: Come riprodurlo
+      description: I passaggi minimi per rivederlo.
+      placeholder: |
+        1. Incollo il sorgente qui sotto
+        2. Scelgo il template Relazione, A4 verticale, indice attivo
+        3. Compilo
+    validations:
+      required: true
+
+  - type: textarea
+    id: sorgente
+    attributes:
+      label: Sorgente minimo
+      description: Il LaTeX più corto che riproduce il problema.
+      render: latex
+
+  - type: textarea
+    id: registro
+    attributes:
+      label: Registro
+      description: Le voci del registro, oppure il registro grezzo se l'errore viene dal motore.
+      render: text
+
+  - type: dropdown
+    id: template
+    attributes:
+      label: Template
+      options: [Tecnico, Relazione, Manuale, Appunti, più di uno, non pertinente]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: modalita
+    attributes:
+      label: Modalità del sorgente
+      description: La dichiara la barra in alto.
+      options: ['Corpo + template', 'Documento completo', 'non pertinente']
+    validations:
+      required: true
+
+  - type: dropdown
+    id: motore
+    attributes:
+      label: Origine del motore
+      description: La dichiara la barra di stato.
+      options: ['nel progetto (installa-motore.bat)', 'di sistema (nel PATH)', 'motore assente']
+    validations:
+      required: true
+
+  - type: input
+    id: ambiente
+    attributes:
+      label: Versione, Node, sistema operativo
+      placeholder: 'TEX2PDF 1.0.1 · Node 20.11 · Windows 11'
+    validations:
+      required: true

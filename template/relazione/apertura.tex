@@ -1,0 +1,31 @@
+% La relazione nasce per essere protocollata: il frontespizio porta sempre
+% ente, riferimento e versione, anche quando è compatto.
+\ifcopertina
+  \begin{titlepage}
+    \centering
+    {\footnotesize\color{fumo}\MakeUppercase{\ente}}\par
+    \vspace{30mm}
+    {\color{accento}\rule{0.30\textwidth}{1.2pt}}\par\vspace{9mm}
+    {\Huge\titolo}\par\vspace{6mm}
+    {\large\itshape\color{fumo}\sottotitolo}\par\vspace{9mm}
+    {\color{accento}\rule{0.30\textwidth}{1.2pt}}\par
+    \vspace{26mm}
+    {\normalsize\autore}\par\vspace{2mm}
+    {\footnotesize\color{fumo}\dataDocumento}\par
+    \vfill
+    {\footnotesize\color{fumo}\riferimento\ \textbullet\ \versione}
+  \end{titlepage}
+\else
+  \begin{center}
+    {\footnotesize\color{fumo}\MakeUppercase{\ente}}\par\vspace{5mm}
+    {\LARGE\titolo}\par\vspace{3mm}
+    {\large\itshape\color{fumo}\sottotitolo}\par\vspace{5mm}
+    {\footnotesize\color{fumo}\autore\ \textbullet\ \dataDocumento\ \textbullet\ \versione}
+  \end{center}
+  \vspace{6mm}
+\fi
+
+\ifindice
+  \tableofcontents
+  \clearpage
+\fi

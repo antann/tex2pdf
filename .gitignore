@@ -1,0 +1,23 @@
+node_modules/
+dist/
+
+# cartelle ricreate a ogni esecuzione: si conservano solo i LEGGIMI
+lavoro/*
+!lavoro/LEGGIMI.txt
+motore/*
+!motore/LEGGIMI.txt
+
+*.log
+/.vs
+/.vscode
+/.idea
+
+# materiale di sviluppo che non deve nemmeno essere tracciato nella privata
+.env
+.env.*
+*.local.*
+*.private.*
+*.pem
+*.key
+id_rsa*
+id_ed25519*

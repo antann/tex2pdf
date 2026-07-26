@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Domanda sull'uso
+    url: https://github.com/antann/tex2pdf/discussions
+    about: Per capire come si usa il programma, non per segnalare un difetto.
+  - name: Vulnerabilità di sicurezza
+    url: https://github.com/antann/tex2pdf/security/advisories/new
+    about: Segnalazione riservata. Non aprire una issue pubblica.

@@ -1,0 +1,30 @@
+% Frontespizio e indice. Se servire una copertina dedicata lo decide opzioni.tex;
+% qui si decide soltanto come appare.
+\ifcopertina
+  \begin{titlepage}
+    \noindent{\color{accento}\rule{\textwidth}{2.4pt}}\par\vspace{6mm}
+    \noindent{\footnotesize\color{fumo}\MakeUppercase{\ente}}\par\vspace{22mm}
+    \noindent{\Huge\bfseries\titolo}\par\vspace{4mm}
+    \noindent{\Large\color{fumo}\sottotitolo}\par\vspace{16mm}
+    \noindent\begin{tabular}{@{}ll@{}}
+      \footnotesize\color{fumo}Autore & \footnotesize\autore\\
+      \footnotesize\color{fumo}Data & \footnotesize\dataDocumento\\
+      \footnotesize\color{fumo}Versione & \footnotesize\versione\\
+      \footnotesize\color{fumo}Riferimento & \footnotesize\riferimento\\
+    \end{tabular}
+    \vfill
+    \noindent{\color{accento}\rule{\textwidth}{0.8pt}}
+  \end{titlepage}
+\else
+  \begin{flushleft}
+    {\LARGE\bfseries\titolo}\par\vspace{2mm}
+    {\large\color{fumo}\sottotitolo}\par\vspace{4mm}
+    {\footnotesize\color{fumo}\autore\ \textbullet\ \dataDocumento\ \textbullet\ \versione}
+  \end{flushleft}
+  \noindent{\color{accento}\rule{\textwidth}{1.6pt}}\par\vspace{6mm}
+\fi
+
+\ifindice
+  \tableofcontents
+  \clearpage
+\fi

@@ -1,0 +1,58 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% Template «relazione» — preambolo.
+% Non caricare babel e non toccare tocdepth: se ne occupa opzioni.tex.
+% ─────────────────────────────────────────────────────────────────────────────
+
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage{helvet}
+\usepackage{courier}
+
+\usepackage{geometry}
+\geometry{left=30mm,right=30mm,top=26mm,bottom=28mm,headsep=8mm,footskip=14mm}
+
+\usepackage{xcolor}
+\definecolor{accento}{HTML}{8A2846}
+\definecolor{grafite}{HTML}{1C1A1B}
+\definecolor{fumo}{HTML}{6B6266}
+\definecolor{nebbia}{HTML}{F2EEEF}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist{itemsep=3pt,parsep=0pt,topsep=5pt}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{nebbia},
+  frame=single, rulecolor=\color{fumo!40},
+  framesep=7pt, xleftmargin=6pt,
+  keywordstyle=\color{accento}\bfseries,
+  commentstyle=\color{fumo}\itshape,
+  breaklines=true, showstringspaces=false
+}
+
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{accento}}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{grafite}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\itshape\color{grafite}}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{22pt}{9pt}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize\itshape\color{fumo}\titolo}
+\fancyhead[R]{\footnotesize\color{fumo}\versione}
+\fancyfoot[C]{\small\color{grafite}\thepage}
+\fancyfoot[L]{\footnotesize\color{fumo}\piede}
+
+\linespread{1.15}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1.4em}
+
+\usepackage[colorlinks=true,linkcolor=accento,urlcolor=accento,citecolor=accento]{hyperref}
+\hypersetup{pdftitle={\titolo},pdfauthor={\autore}}

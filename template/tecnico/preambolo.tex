@@ -1,0 +1,66 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% Template «tecnico» — preambolo.
+% Incluso dopo \documentclass e dopo metadati.tex, prima di opzioni.tex.
+% Non caricare babel e non toccare tocdepth: se ne occupa opzioni.tex, che ha
+% l'ultima parola perché rappresenta le scelte fatte nel modulo.
+% ─────────────────────────────────────────────────────────────────────────────
+
+% Carattere: pacchetti PSNFSS, non fontspec. La resa non deve dipendere dai
+% font installati sulla macchina, e PSNFSS fa parte della distribuzione
+% minima: è l'insieme di font su cui si può contare ovunque.
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\usepackage{courier}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{geometry}
+\geometry{left=22mm,right=22mm,top=20mm,bottom=22mm,headsep=7mm,footskip=12mm}
+
+\usepackage{xcolor}
+\definecolor{accento}{HTML}{0090A8}
+\definecolor{grafite}{HTML}{16181D}
+\definecolor{fumo}{HTML}{5B636E}
+\definecolor{nebbia}{HTML}{EDEEEC}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,parsep=0pt,topsep=4pt}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{nebbia},
+  frame=leftline, framerule=1.6pt, rulecolor=\color{accento},
+  framesep=6pt, xleftmargin=8pt,
+  keywordstyle=\color{accento}\bfseries,
+  commentstyle=\color{fumo}\itshape,
+  stringstyle=\color{grafite},
+  breaklines=true, showstringspaces=false,
+  numbers=left, numberstyle=\tiny\color{fumo}, numbersep=8pt
+}
+
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{grafite}}{\thesection}{0.7em}{}[\vspace{2pt}{\color{accento}\titlerule[1.2pt]}]
+\titleformat{\subsection}{\large\bfseries\color{grafite}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{fumo}}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{5pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\color{fumo}\titolo}
+\fancyhead[R]{\footnotesize\color{fumo}\riferimento}
+\fancyfoot[L]{\footnotesize\color{fumo}\piede}
+\fancyfoot[R]{\footnotesize\color{grafite}\thepage}
+
+\linespread{1.06}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+
+\usepackage[colorlinks=true,linkcolor=accento,urlcolor=accento,citecolor=accento]{hyperref}
+\hypersetup{pdftitle={\titolo},pdfauthor={\autore}}

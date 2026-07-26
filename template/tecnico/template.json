@@ -1,0 +1,16 @@
+{
+  "nome": "Tecnico",
+  "descrizione": "Documentazione di prodotto e specifiche. Colonna densa, codice in evidenza, filetto sotto il titolo.",
+  "specifiche": "Helvetica · 10 pt · margini 22/20 mm",
+  "accento": "#0090a8",
+  "classe": "article",
+  "opzioniClasse": [
+    "10pt"
+  ],
+  "supporta": {
+    "indice": true,
+    "copertina": true,
+    "fronteRetro": true,
+    "piede": true
+  }
+}

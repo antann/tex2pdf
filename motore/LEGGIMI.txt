@@ -1,0 +1,11 @@
+Questa cartella ospita l'eseguibile del motore di composizione e la sua cache
+dei pacchetti.
+
+Windows:  esegui installa-motore.bat nella cartella del progetto.
+Altri:    metti qui l'eseguibile di Tectonic (nome: tectonic), oppure
+          installalo di sistema: se e' nel PATH, l'applicazione lo trova.
+
+Tectonic: https://tectonic-typesetting.github.io
+
+Il contenuto di questa cartella si puo' cancellare in qualunque momento: si
+ricrea reinstallando il motore.

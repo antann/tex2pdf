@@ -1,0 +1,40 @@
+% Documento già completo di preambolo.
+%
+% Aprendolo, TEX2PDF lo dichiara «documento completo» nella barra in alto e
+% disattiva la galleria: il sorgente porta la propria veste, e sovrapporgliene
+% una seconda produrrebbe solo errori confusi.
+%
+% Il pulsante «estrai il corpo» fa la conversione: prende ciò che sta fra
+% \begin{document} e \end{document} come nuovo sorgente e sposta il resto del
+% preambolo fra le aggiunte, restituendo l'uso dei template. L'operazione si
+% annulla.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[margin=25mm]{geometry}
+\usepackage{mathpazo}
+
+\title{Documento con preambolo proprio}
+\author{Chi l'ha scritto}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Perché la galleria è spenta}
+
+Questo sorgente dichiara la propria classe, i propri font e i propri margini.
+Il template non ha nulla da aggiungere: il documento si compila com'è.
+
+\section{Che cosa fa l'estrazione}
+
+Prende queste sezioni e le mette nell'editor come corpo; manda
+\verb|\usepackage{mathpazo}| e le altre righe del preambolo nel pannello delle
+aggiunte. Da lì in poi il documento torna a essere impaginabile con i quattro
+template, e i metadati del modulo tornano a valere.
+
+\end{document}

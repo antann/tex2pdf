@@ -1,0 +1,58 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% Template «appunti» — preambolo.
+% Tutto a spaziatura fissa e in scala di grigi: è una veste da verbale, che deve
+% restare leggibile anche fotocopiata.
+% Non caricare babel e non toccare tocdepth: se ne occupa opzioni.tex.
+% ─────────────────────────────────────────────────────────────────────────────
+
+\usepackage[T1]{fontenc}
+\usepackage{courier}
+\renewcommand{\familydefault}{\ttdefault}
+
+\usepackage{geometry}
+\geometry{left=18mm,right=18mm,top=18mm,bottom=20mm,headsep=6mm,footskip=11mm}
+
+\usepackage{xcolor}
+\definecolor{accento}{HTML}{16181D}
+\definecolor{grafite}{HTML}{16181D}
+\definecolor{fumo}{HTML}{5B636E}
+\definecolor{nebbia}{HTML}{EFEFEF}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist{itemsep=1pt,parsep=0pt,topsep=3pt,leftmargin=*}
+\setlist[itemize]{label=\textendash}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{nebbia},
+  frame=none, xleftmargin=10pt,
+  keywordstyle=\bfseries, commentstyle=\color{fumo},
+  breaklines=true, showstringspaces=false
+}
+
+\usepackage{titlesec}
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{0.6em}{\MakeUppercase}[\vspace{1pt}\hrule]
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{14pt}{5pt}
+\titlespacing*{\subsection}{0pt}{9pt}{3pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize\titolo}
+\fancyhead[R]{\footnotesize\dataDocumento}
+\fancyfoot[L]{\footnotesize\color{fumo}\piede}
+\fancyfoot[R]{\footnotesize\thepage}
+
+\linespread{1.04}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+\usepackage[colorlinks=false,hidelinks]{hyperref}
+\hypersetup{pdftitle={\titolo},pdfauthor={\autore}}

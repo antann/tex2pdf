@@ -1,0 +1,42 @@
+name: Proposta di miglioramento
+description: Una funzione o un cambiamento che vorresti vedere.
+labels: ['proposta']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Dai un'occhiata a `ROADMAP.md`: alcune proposte sono già in coda, altre
+        sono dichiarate fuori ambito. Non è un divieto di riproporle, ma
+        conviene sapere da dove si parte.
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: Il problema
+      description: Che cosa non riesci a fare oggi. Non la soluzione: il problema.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Come lo risolveresti
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Alternative considerate
+      description: Anche "l'ho aggirato così" è un'informazione utile.
+
+  - type: checkboxes
+    id: vincoli
+    attributes:
+      label: Compatibilità con l'impostazione del progetto
+      description: Serve a capire subito se la proposta regge. Spuntale solo se sei sicuro.
+      options:
+        - label: L'anteprima resta il PDF prodotto dal motore, non una seconda resa del sorgente
+        - label: Non introduce codice che calcoli salti pagina, altezze o posizioni — l'impaginazione la fa TeX
+        - label: Non richiede un backend remoto, un database o l'autenticazione
+        - label: Non richiede dipendenze nuove (o so spiegare perché ne serve una)

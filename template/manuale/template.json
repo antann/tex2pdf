@@ -1,0 +1,16 @@
+{
+  "nome": "Manuale",
+  "descrizione": "Guide operative e procedure. Titoli compatti, blocchi riquadrati, indice profondo.",
+  "specifiche": "Avant Garde / Helvetica · 11 pt · margini 24/20 mm",
+  "accento": "#c8571b",
+  "classe": "article",
+  "opzioniClasse": [
+    "11pt"
+  ],
+  "supporta": {
+    "indice": true,
+    "copertina": true,
+    "fronteRetro": true,
+    "piede": true
+  }
+}

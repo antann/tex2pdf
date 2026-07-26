@@ -1,0 +1,16 @@
+{
+  "nome": "Relazione",
+  "descrizione": "Report e documenti formali. Copertina ampia, impostazione in grazie, margini generosi.",
+  "specifiche": "Palatino · 11 pt · margini 30/26 mm",
+  "accento": "#8a2846",
+  "classe": "article",
+  "opzioniClasse": [
+    "11pt"
+  ],
+  "supporta": {
+    "indice": true,
+    "copertina": true,
+    "fronteRetro": true,
+    "piede": true
+  }
+}
