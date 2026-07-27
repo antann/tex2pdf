@@ -62,6 +62,17 @@ function interrompi(stato) {
   if (stato.processo && !stato.processo.killed) stato.processo.kill('SIGKILL')
 }
 
+/**
+ * Ferma la compilazione in corso, se c'è.
+ *
+ * Serve alla chiusura dell'applicazione: su Windows la morte del processo che
+ * ha lanciato il motore non porta con sé il motore, che resterebbe a macinare
+ * un documento che nessuno guarderà più.
+ */
+export function fermaCompilazione() {
+  if (inCorso) interrompi(inCorso)
+}
+
 async function esegui(richiesta, stato) {
   const motore = trovaMotore()
   if (!motore) {

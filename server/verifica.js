@@ -8,7 +8,10 @@
  *   npm run verifica
  */
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { leggiRegistro } from './registro.js'
 import { componiDocumento, componiMetadati, componiOpzioni, proteggi } from './composizione.js'
 import { rilevaModalita, estraiCorpo } from '../src/lib/rilevamento.js'
@@ -118,6 +121,116 @@ prova('gli argomenti passati al motore sono solo quelli che accetta', () => {
     assert.ok(argomenti.includes(atteso), `manca ${atteso}`)
   }
   assert.doesNotMatch(argomenti, /--color/, '--color non è valido dopo il sottocomando')
+})
+
+console.log('\nGuscio dell’applicazione')
+
+const RADICE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const PERCORSI = new URL('./percorsi.js', import.meta.url).href
+
+/**
+ * Rilegge `percorsi.js` in un processo a parte con l'ambiente indicato: le
+ * costanti si calcolano una volta sola all'import, e qui sono già state
+ * calcolate con l'ambiente di chi lancia le verifiche.
+ */
+function radiciCon(ambiente) {
+  const codice = `import(${JSON.stringify(PERCORSI)}).then((m) => console.log(JSON.stringify({
+    template: m.CARTELLA_TEMPLATE, dist: m.CARTELLA_DIST, motoreIncluso: m.CARTELLA_MOTORE_INCLUSO,
+    lavoro: m.CARTELLA_LAVORO, assets: m.CARTELLA_ASSETS, motore: m.CARTELLA_MOTORE, cache: m.CARTELLA_CACHE
+  })))`
+  const uscita = execFileSync(process.execPath, ['--input-type=module', '-e', codice], {
+    env: { ...process.env, TEX2PDF_RISORSE: '', TEX2PDF_DATI: '', ...ambiente },
+    encoding: 'utf8'
+  })
+  return JSON.parse(uscita)
+}
+
+prova('senza variabili d’ambiente le due radici coincidono con il progetto', () => {
+  const p = radiciCon({})
+  for (const cartella of Object.values(p)) {
+    assert.equal(path.resolve(cartella, '..').startsWith(RADICE) || cartella.startsWith(RADICE), true,
+      `${cartella} è fuori dal progetto`)
+  }
+  assert.equal(p.template, path.join(RADICE, 'template'))
+  assert.equal(p.lavoro, path.join(RADICE, 'lavoro'))
+})
+
+prova('installata, ciò che si scrive sta fuori dalla cartella dell’applicazione', () => {
+  const risorse = path.join(RADICE, 'finta-installazione')
+  const dati = path.join(RADICE, 'finti-dati')
+  const p = radiciCon({ TEX2PDF_RISORSE: risorse, TEX2PDF_DATI: dati })
+
+  // sola lettura: codice, interfaccia, template, motore distribuito
+  for (const cartella of [p.template, p.dist, p.motoreIncluso]) {
+    assert.ok(cartella.startsWith(risorse), `${cartella} dovrebbe stare fra le risorse`)
+  }
+  // scrivibili: nessuna di queste deve finire dentro l'installazione
+  for (const cartella of [p.lavoro, p.assets, p.motore, p.cache]) {
+    assert.ok(cartella.startsWith(dati), `${cartella} dovrebbe stare fra i dati`)
+  }
+})
+
+prova('il pacchetto dichiara tutto ciò che serve a far partire la finestra', () => {
+  const pacchetto = JSON.parse(readFileSync(path.join(RADICE, 'package.json'), 'utf8'))
+  assert.ok(existsSync(path.join(RADICE, pacchetto.main)), `manca ${pacchetto.main}`)
+  assert.ok(existsSync(path.join(RADICE, 'electron', 'preload.cjs')), 'manca il preload')
+
+  // Il server gira dentro il processo principale: se `server/` o `template/`
+  // restassero fuori dal pacchetto, l'applicazione installata si aprirebbe su
+  // una finestra che non compila nulla.
+  for (const atteso of ['dist/**/*', 'electron/**/*', 'server/**/*', 'template/**/*', 'risorse/**/*', 'motore/tectonic.exe']) {
+    assert.ok(pacchetto.build.files.includes(atteso), `il pacchetto non include ${atteso}`)
+  }
+  assert.equal(pacchetto.build.asar, false, 'con l’asar il motore non è eseguibile e gli ESM non si caricano')
+})
+
+prova('il disegno del logo è uno solo, e da lì passano finestra, installer e favicon', () => {
+  // Un secondo disegno diverge dal primo, e diverge senza che se ne accorga
+  // nessuno: l'icona della finestra e quella della scheda del browser non si
+  // guardano mai insieme.
+  const pacchetto = JSON.parse(readFileSync(path.join(RADICE, 'package.json'), 'utf8'))
+  assert.equal(pacchetto.build.win.icon, 'risorse/icona.ico')
+  for (const voce of ['installerIcon', 'uninstallerIcon', 'installerHeaderIcon']) {
+    assert.equal(pacchetto.build.nsis[voce], 'risorse/icona.ico', `nsis.${voce} punta altrove`)
+  }
+  assert.match(
+    readFileSync(path.join(RADICE, 'electron', 'main.cjs'), 'utf8'),
+    /'risorse',\s*'icona\.ico'/,
+    'la finestra non chiede l’icona generata'
+  )
+  assert.match(
+    readFileSync(path.join(RADICE, 'index.html'), 'utf8'),
+    /rel="icon"[^>]*href="\/logo\.svg"/,
+    'la pagina non dichiara la favicon'
+  )
+  assert.ok(existsSync(path.join(RADICE, 'public', 'logo.svg')), 'manca il disegno di partenza')
+})
+
+prova('l’icona generata è un .ico vero e contiene le misure piccole', () => {
+  // Un file corrotto o troncato non fa fallire electron-builder: costruisce
+  // l'installer e mette l'icona di Electron, e la differenza si vede solo a
+  // installazione fatta.
+  const percorso = path.join(RADICE, 'risorse', 'icona.ico')
+  assert.ok(existsSync(percorso), 'manca risorse/icona.ico: lancia npm run icone')
+  const dati = readFileSync(percorso)
+  assert.equal(dati.readUInt16LE(0), 0, 'intestazione .ico non riconoscibile')
+  assert.equal(dati.readUInt16LE(2), 1, 'il file non si dichiara come icona')
+
+  const quante = dati.readUInt16LE(4)
+  const misure = new Set()
+  for (let i = 0; i < quante; i++) misure.add(dati.readUInt8(6 + i * 16) || 256)
+  // 16 e 32 sono quelle che Windows usa nella barra e nelle liste: se
+  // mancassero le ricaverebbe riducendo la grande, e verrebbero impastate
+  for (const misura of [16, 32, 256]) {
+    assert.ok(misure.has(misura), `l’icona non contiene la misura ${misura}`)
+  }
+})
+
+prova('l’interfaccia non conosce percorsi assoluti verso il server', () => {
+  // La finestra carica una porta scelta dal sistema: un indirizzo scritto a
+  // mano funzionerebbe in sviluppo e fallirebbe una volta installata.
+  const api = readFileSync(path.join(RADICE, 'src', 'lib', 'api.js'), 'utf8')
+  assert.doesNotMatch(api, /https?:\/\//, 'le chiamate al server devono restare relative')
 })
 
 console.log('\nComposizione')

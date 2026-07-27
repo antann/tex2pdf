@@ -8,14 +8,20 @@ rischia di rompere senza accorgersene.
 
 ```
 server/
-  percorsi.js       cartelle del progetto e ricerca del motore
+  percorsi.js       le due radici, cartelle del progetto, ricerca del motore
   catalogo.js       scansione di template/, validazione delle cartelle
   composizione.js   generazione di documento.tex, metadati.tex, opzioni.tex
   compilatore.js    cartella di lavoro, esecuzione, timeout, annullamento
   registro.js       da .log a elenco di voci con file, riga e messaggio
-  server.js         cinque rotte e file statici
+  server.js         le rotte, i file statici, avvia()
   verifica.js       verifiche automatiche (npm run verifica)
   scalda.js         prima compilazione di tutti i template (npm run scalda)
+
+electron/
+  main.cjs                  finestra, server, menu, dialoghi
+  preload.cjs               il ponte, quattro funzioni
+  avvia-desktop.cjs         avvio in sviluppo (npm run desktop)
+  controlla-pacchetto.cjs   controlli prima dell'installer
 
 src/
   App.jsx                    stato, ciclo di compilazione, telaio
@@ -28,6 +34,12 @@ src/
   lib/esempio.js             documento di prova
   styles.css                 foglio unico
 
+scripts/
+  genera-icone.cjs  da public/logo.svg alle icone (npm run icone)
+  pubblica.mjs      pubblicazione di una versione
+
+public/logo.svg   il disegno del logo, unico
+risorse/          icona della finestra e dell'installer, generate da lì
 template/<slug>/  i template — vedi template.md
 motore/           eseguibile e cache, non versionati
 lavoro/           cartella di lavoro e immagini caricate, non versionate
@@ -39,6 +51,60 @@ Una pagina web non può eseguire un programma nativo, e il motore di
 composizione è un programma nativo. Tutto ciò che non serve a compilare non
 appartiene a `server.js`: niente basi di dati, niente autenticazione, niente
 sessioni. Ascolta su `127.0.0.1` e non è raggiungibile dalla rete.
+
+## La finestra
+
+Il guscio Electron non è una seconda applicazione: è la stessa, chiusa in una
+finestra. Il processo principale avvia il server dentro di sé e carica
+`http://127.0.0.1:<porta>`, mai `file://`. Caricando un file, l'interfaccia —
+che parla col server per percorsi relativi — non avrebbe più nessuno con cui
+parlare, e servirebbe una seconda strada per le stesse chiamate: due strade che
+prima o poi divergono.
+
+La porta la sceglie il sistema, tranne in sviluppo dove è 4180 perché è quella
+che il proxy di Vite si aspetta. Così l'applicazione installata non litiga con
+un server avviato a mano dal repository.
+
+**Il server non sa nulla di Electron.** L'unico aggancio sono due variabili
+d'ambiente lette da `percorsi.js`: `TEX2PDF_RISORSE`, dove stanno codice,
+interfaccia compilata, template e motore incluso — di sola lettura quando
+l'applicazione è installata — e `TEX2PDF_DATI`, dove si scrive. Chi lavora dal
+repository non le imposta e le due radici tornano a coincidere.
+
+**Il documento resta isolato.** `contextIsolation` attivo, `nodeIntegration`
+spento. Ogni capacità nuova passa da una funzione dichiarata in `preload.cjs` e
+da un `ipcMain.handle` in `main.cjs`; `ipcRenderer` non esce di lì. I gestori
+restituiscono sempre un oggetto — `{ annullato }`, `{ errore }` o l'esito — e
+non lanciano mai.
+
+**L'applicazione deve continuare a funzionare nel solo browser.** Le funzioni di
+sistema si attivano se `window.tex2pdf` esiste, altrimenti si ripiega su ciò che
+il browser sa fare. `npm run dev` più `npm run servi` devono restare una via
+d'uso completa, non una modalità degradata.
+
+**Niente asar.** Il pacchetto contiene moduli ESM da importare e un binario da
+eseguire: l'archivio non aggiungerebbe che modi di rompersi.
+
+## Il logo
+
+Il disegno vive in un file solo, `public/logo.svg`, ed è servito così com'è come
+favicon. L'icona della finestra e quella dell'installer vogliono un `.ico`, che è
+un formato di bitmap: `npm run icone` lo genera da lì e lo scrive in `risorse/`.
+
+Si rasterizza a ogni misura invece di ridurre l'immagine grande, perché a sedici
+e ventiquattro pixel una riduzione impasta le linee. Il motore di disegno è
+quello di Electron, che è già una dipendenza di sviluppo: una libreria grafica
+in più per convertire un file sarebbe sproporzionata.
+
+L'icona generata è versionata, e non si rigenera dentro `npm run dist`: servirebbe
+una sessione grafica, che su una macchina di compilazione non c'è. Chi tocca il
+disegno rilancia `npm run icone` e mette nel commit anche ciò che ne esce;
+`controlla-pacchetto.cjs` si accorge se manca, e le verifiche si accorgono se il
+`.ico` non è un `.ico` o se ha perso le misure piccole.
+
+**Un disegno solo.** Un secondo file diverge dal primo senza che se ne accorga
+nessuno: l'icona della barra delle applicazioni e quella della scheda del
+browser non si guardano mai insieme.
 
 ## Le rotte
 

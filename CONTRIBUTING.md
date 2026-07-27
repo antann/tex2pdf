@@ -19,6 +19,7 @@ npm run dev        # l'interfaccia, su 5173, in un altro terminale
 npm run build      # compilazione di produzione
 npm run verifica   # verifiche automatiche
 npm run scalda     # ricompila tutti i template col documento di prova
+npm run icone      # rigenera le icone da public/logo.svg
 ```
 
 Serve Node.js 18 o successivo. Per compilare davvero serve il motore: su

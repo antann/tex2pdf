@@ -12,6 +12,7 @@ import http from 'node:http'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { leggiCatalogo } from './catalogo.js'
 import { compila, percorsoPdfCorrente, percorsoSorgenteComposto } from './compilatore.js'
 import {
@@ -39,8 +40,6 @@ const TIPI = {
   '.pdf': 'application/pdf',
   '.woff2': 'font/woff2'
 }
-
-preparaCartelle()
 
 const server = http.createServer(async (richiesta, risposta) => {
   const url = new URL(richiesta.url, 'http://127.0.0.1')
@@ -178,12 +177,36 @@ function invia(risposta, codice, oggetto) {
   risposta.end(dati)
 }
 
-server.listen(PORTA, '127.0.0.1', () => {
-  const motore = trovaMotore()
-  console.log(`TEX2PDF — server su http://localhost:${PORTA}`)
-  console.log(
-    motore
-      ? `Motore: ${motore.percorso} (${motore.origine})`
-      : 'Motore assente: esegui installa-motore.bat prima di compilare.'
-  )
-})
+/**
+ * Avvia l'ascolto e riporta la porta davvero ottenuta.
+ *
+ * Con `porta = 0` la sceglie il sistema fra quelle libere: serve a chi apre il
+ * server dentro una finestra, che non ha ragione di litigare con un server
+ * avviato a mano sulla porta consueta.
+ */
+export function avvia(porta = PORTA) {
+  preparaCartelle()
+  return new Promise((risolvi, rifiuta) => {
+    server.once('error', rifiuta)
+    server.listen(porta, '127.0.0.1', () => {
+      server.off('error', rifiuta)
+      risolvi({ server, porta: server.address().port })
+    })
+  })
+}
+
+/** Vero solo quando questo file è il programma lanciato: `npm run servi`. */
+const eseguitoDirettamente =
+  process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url
+
+if (eseguitoDirettamente) {
+  avvia().then(({ porta }) => {
+    const motore = trovaMotore()
+    console.log(`TEX2PDF — server su http://localhost:${porta}`)
+    console.log(
+      motore
+        ? `Motore: ${motore.percorso} (${motore.origine})`
+        : 'Motore assente: esegui installa-motore.bat prima di compilare.'
+    )
+  })
+}

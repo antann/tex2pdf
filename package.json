@@ -1,20 +1,40 @@
 {
   "name": "tex2pdf",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": true,
   "description": "Compilazione di documenti LaTeX in PDF tramite template",
   "license": "MIT",
   "author": "Antonio Annunziata",
   "homepage": "https://github.com/antann/tex2pdf#readme",
-  "repository": { "type": "git", "url": "https://github.com/antann/tex2pdf.git" },
-  "bugs": { "url": "https://github.com/antann/tex2pdf/issues" },
-  "keywords": ["latex", "pdf", "tectonic", "template", "vite", "react"],
-  "engines": { "node": ">=18" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antann/tex2pdf.git"
+  },
+  "bugs": {
+    "url": "https://github.com/antann/tex2pdf/issues"
+  },
+  "keywords": [
+    "latex",
+    "pdf",
+    "tectonic",
+    "template",
+    "vite",
+    "react"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "servi": "node server/server.js",
+    "desktop": "node electron/avvia-desktop.cjs",
+    "desktop:build": "npm run build && node electron/avvia-desktop.cjs --produzione",
+    "electron": "electron .",
+    "dist": "npm run verifica && npm run build && node electron/controlla-pacchetto.cjs && electron-builder",
+    "icone": "electron scripts/genera-icone.cjs",
     "verifica": "node server/verifica.js",
     "scalda": "node server/scalda.js",
     "pubblica": "node scripts/pubblica.mjs",
@@ -33,6 +53,45 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
     "vite": "^5.4.8"
+  },
+  "build": {
+    "appId": "local.tex2pdf",
+    "productName": "TEX2PDF",
+    "asar": false,
+    "directories": {
+      "output": "installer"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "server/**/*",
+      "template/**/*",
+      "risorse/**/*",
+      "motore/tectonic.exe",
+      "package.json",
+      "!node_modules/**/*"
+    ],
+    "win": {
+      "icon": "risorse/icona.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "TEX2PDF",
+      "installerIcon": "risorse/icona.ico",
+      "uninstallerIcon": "risorse/icona.ico",
+      "installerHeaderIcon": "risorse/icona.ico"
+    }
   }
 }

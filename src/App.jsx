@@ -30,6 +30,12 @@ const METADATI_INIZIALI = {
 
 const RITARDO = 1100
 
+// Presente solo quando l'interfaccia gira dentro la finestra dell'applicazione.
+// Nel browser resta indefinito e ogni funzione di sistema ripiega su ciò che il
+// browser sa fare: l'applicazione deve continuare a funzionare in entrambi i modi.
+const ponte = typeof window !== 'undefined' ? window.tex2pdf : undefined
+const DESKTOP = !!ponte?.desktop
+
 export default function App() {
   const [sorgente, setSorgente] = useState(ESEMPIO)
   const [nomeFile, setNomeFile] = useState('')
@@ -151,6 +157,15 @@ export default function App() {
     setRipristino(null)
   }
 
+  const apriDaSistema = useCallback(async () => {
+    const esito = await ponte.apriFile()
+    if (esito?.annullato) return
+    if (esito?.errore) return setAvviso(`Apertura non riuscita: ${esito.errore}`)
+    setSorgente(esito.testo)
+    setNomeFile(esito.nome)
+    setRipristino(null)
+  }, [])
+
   const caricaAssets = async (file) => {
     for (const uno of file) {
       const dati = await uno.arrayBuffer()
@@ -188,24 +203,48 @@ export default function App() {
     setRipristino(null)
   }
 
+  /**
+   * Nella finestra si passa dal dialogo di sistema, così l'utente sceglie dove
+   * mettere il file; nel browser resta lo scaricamento, che è l'unica cosa che
+   * il browser sappia fare.
+   */
+  const salva = async (blob, nome) => {
+    if (!DESKTOP) return scarica(blob, nome)
+    const esito = await ponte.salvaFile(nome, new Uint8Array(await blob.arrayBuffer()))
+    if (esito?.annullato) return
+    if (esito?.errore) return setAvviso(`Salvataggio non riuscito: ${esito.errore}`)
+    setAvviso(`Salvato in ${esito.percorso}`)
+  }
+
   // Si salva il PDF che è a schermo, non quello sul disco: una compilazione
   // fallita lascia in cartella un file parziale, e salvarlo darebbe all'utente
   // un documento diverso da quello che sta guardando.
   const salvaPdf = () => {
     if (!pdf?.blob) return setAvviso('Non c\u2019è ancora un PDF da salvare.')
-    scarica(pdf.blob, `${nomeBase()}.pdf`)
+    salva(pdf.blob, `${nomeBase()}.pdf`)
   }
 
   const esportaSorgente = async () => {
     const testo = await api.scaricaSorgenteComposto().catch(() => null)
     if (!testo) return setAvviso('Non c\u2019è ancora un sorgente composto.')
-    scarica(new Blob([testo], { type: 'text/plain' }), `${nomeBase()}.tex`)
+    salva(new Blob([testo], { type: 'text/plain' }), `${nomeBase()}.tex`)
   }
 
   const nomeBase = () =>
     (nomeFile.replace(/\.tex$/i, '') || metadati.titolo || 'documento')
       .replace(/[\\/:*?"<>|]/g, '-')
       .trim() || 'documento'
+
+  // Le voci del menu chiamano le stesse funzioni dei pulsanti. Si passa da un
+  // riferimento perché quelle funzioni si ricostruiscono a ogni render, e
+  // riabbonarsi ogni volta al menu significherebbe perdere comandi per strada.
+  const comandi = useRef({})
+  comandi.current = { apri: apriDaSistema, salva: salvaPdf, esporta: esportaSorgente }
+
+  useEffect(() => {
+    if (!DESKTOP) return
+    return ponte.suComando((comando) => comandi.current[comando]?.())
+  }, [])
 
   const templateScelto = catalogo.find((t) => t.slug === templateSlug)
 

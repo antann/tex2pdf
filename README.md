@@ -1,3 +1,5 @@
+<img src="risorse/logo-256.png" alt="" width="128" align="right" />
+
 # TEX2PDF
 
 [![Compilazione](https://github.com/antann/tex2pdf/actions/workflows/build.yml/badge.svg)](https://github.com/antann/tex2pdf/actions/workflows/build.yml)
@@ -37,24 +39,53 @@ minuto: sta scaricando decine di megabyte di LaTeX. Le successive sono immediate
 ## Avvio (Windows)
 
 ```
-avvia.bat              sviluppo, ricarica automatica   → http://localhost:5173
-avvia.bat --build      interfaccia compilata           → http://localhost:4180
+avvia.bat              apre l'applicazione, con ricarica automatica
+avvia.bat --build      apre l'applicazione sull'interfaccia compilata
+avvia.bat --browser    apre nel browser: interfaccia 5173, compilatore 4180
 arresta.bat            ferma tutto
 ```
 
-Al primo avvio `avvia.bat` installa da sé le dipendenze. Il browser si apre
-dopo qualche secondo; se non succede, l'indirizzo è quello stampato a video.
+Al primo avvio `avvia.bat` installa da sé le dipendenze — Electron compreso,
+quindi può volerci qualche minuto. La finestra si apre da sola: prima parte il
+server, poi compare la finestra. Il browser non viene usato, se non con
+`--browser`.
 
 ## Avvio da riga di comando (qualsiasi sistema)
 
 ```bash
 npm install
-npm run servi      # compilatore su 4180
-npm run dev        # interfaccia su 5173, in un altro terminale
-npm run build      # compila l'interfaccia in dist/, poi basta npm run servi
-npm run verifica   # verifiche automatiche
-npm run scalda     # ricompila tutti i template, per riempire la cache
+npm run desktop        # apre la finestra, con ricarica automatica
+npm run desktop:build  # compila l'interfaccia e apre la finestra
+npm run servi          # solo compilatore su 4180, senza finestra
+npm run dev            # solo interfaccia su 5173, in un altro terminale
+npm run build          # compila l'interfaccia in dist/
+npm run verifica       # verifiche automatiche
+npm run scalda         # ricompila tutti i template, per riempire la cache
 ```
+
+Nella finestra e nel browser l'applicazione è la stessa: la finestra carica
+l'indirizzo del server locale, non una copia dei file. Le uniche differenze
+sono il menu e i dialoghi di apertura e salvataggio, che nel browser diventano
+il consueto scaricamento.
+
+## Costruire l'installer (Windows)
+
+```bash
+npm run dist
+```
+
+Produce `installer\TEX2PDF Setup <versione>.exe`. Prima di lanciarlo serve il
+motore in `motore\tectonic.exe` — `installa-motore.bat` lo scarica — perché
+viene incluso nell'installer: chi riceve il pacchetto non deve procurarselo.
+Il comando si ferma con un messaggio se manca il motore o l'interfaccia
+compilata, invece di produrre un installer monco.
+
+L'installer va costruito sul sistema di destinazione: `electron-builder` non
+compila per piattaforme diverse dalla propria.
+
+Una volta installata, l'applicazione tiene il codice e i template nella cartella
+d'installazione, che resta di sola lettura, e scrive tutto il resto — cartella di
+lavoro, immagini caricate, cache dei pacchetti — in `%APPDATA%\TEX2PDF`.
 
 Su Linux e macOS il motore va messo a mano in `motore/` (l'eseguibile si chiama
 `tectonic`), oppure installato di sistema: se è nel `PATH`, l'applicazione lo
@@ -131,6 +162,7 @@ in [`docs/template.md`](docs/template.md).
 ```
 server/      il server locale e la logica di compilazione
 src/         l'interfaccia
+electron/    la finestra dell'applicazione
 template/    i template, una cartella ciascuno
 motore/      l'eseguibile di Tectonic e la cache dei pacchetti
 lavoro/      cartella di lavoro e immagini caricate
@@ -142,7 +174,13 @@ ricrea con `installa-motore.bat`, la seconda alla compilazione successiva.
 ## Quando qualcosa non va
 
 **«Motore assente» nella barra di stato.** Manca `motore\tectonic.exe`: esegui
-`installa-motore.bat`.
+`installa-motore.bat`. Nell'applicazione installata il motore è già incluso; se
+manca lo stesso, metti l'eseguibile in `%APPDATA%\TEX2PDF\motore\`, che ha la
+precedenza su quello distribuito.
+
+**La finestra non si apre.** Se la finestra non compare ma resta il terminale,
+il messaggio è lì. Il caso consueto è la porta 4180 occupata da un altro server
+avviato a mano: `arresta.bat` la libera.
 
 **La prima compilazione impiega minuti.** È il motore che scarica i pacchetti.
 Succede una volta; `npm run scalda` lo fa succedere quando decidi tu.

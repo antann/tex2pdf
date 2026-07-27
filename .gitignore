@@ -1,5 +1,6 @@
 node_modules/
 dist/
+installer/
 
 # cartelle ricreate a ogni esecuzione: si conservano solo i LEGGIMI
 lavoro/*

@@ -2,6 +2,34 @@
 
 Le voci descrivono ciò che cambia per chi usa il programma.
 
+## Non ancora pubblicato
+
+### Aggiunto
+
+- **L'applicazione ha un logo.** Un «2» disegnato come una lettera, tagliato a
+  metà: a sinistra il blu del sorgente, a destra il ciano della pagina
+  composta, e sotto il foglio dell'anteprima su cui la barra poggia. Sul
+  fianco sinistro il profilo esce in una punta: è la vita di una graffa. Lo
+  stesso disegno è la favicon nella scheda del browser, l'icona della finestra
+  e quella dell'installer.
+
+## 1.1.0 — 28 luglio 2026
+
+### Aggiunto
+
+- **L'applicazione ha una finestra propria.** `avvia.bat` non apre più il
+  browser: apre l'applicazione. Il server parte da sé dentro la finestra, su una
+  porta scelta dal sistema, e si ferma quando la finestra si chiude — comprese
+  le compilazioni ancora in corso.
+- Menu in italiano con le scorciatoie consuete, e dialoghi di sistema per aprire
+  un `.tex` e per salvare: il PDF e il sorgente composto si scrivono dove
+  decidi, invece di finire nella cartella degli scaricamenti.
+- `npm run dist` costruisce un installer per Windows, con il motore incluso.
+  L'applicazione installata tiene i propri file di lavoro e la cache in
+  `%APPDATA%\TEX2PDF`, lasciando intatta la cartella d'installazione.
+- `avvia.bat --browser` conserva il modo di prima, per chi lo preferisce.
+  Nel browser l'applicazione funziona esattamente come sempre.
+
 ## 1.0.1 — 25 luglio 2026
 
 ### Corretto
