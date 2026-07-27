@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img">
+  <title>TEX2PDF</title>
+  <!--
+    Logo di TEX2PDF. Sorgente unica: da qui nascono la favicon, servita così
+    com'è, e per rasterizzazione l'icona della finestra e dell'installer
+    (npm run icone).
+
+    Il segno è un «2» disegnato come una lettera e non come un tratto: un solo
+    contorno chiuso, senza spessori di linea. L'occhiello sta fra due archi
+    concentrici — r 111 fuori, r 57 dentro, centro (256, 216) — e la coda ne
+    esce in tangente a 50,1°. La tangenza non è un vezzo: attaccare la
+    diagonale con un angolo qualsiasi lascia un gomito che a sedici pixel
+    diventa una bava.
+
+    Sul fianco sinistro, a ore nove, il contorno esce in una punta: è la vita
+    di una graffa, ed è l'unico riferimento al codice. Va all'infuori e non
+    all'indentro perché una tacca sul profilo di una lettera si legge come un
+    danno, una punta come una scelta. Anche il terminale dell'occhiello
+    finisce in un becco appena accennato, per la stessa ragione: i terminali
+    sono il posto dove un carattere mette il carattere.
+
+    Il colore taglia il segno a metà sull'asse x = 256: a sinistra, da dove
+    entra il testo, il blu del sorgente; a destra, da dove esce il risultato,
+    il ciano della pagina composta. Le due metà si sovrappongono di sei decimi
+    di punto, perché due tagli esatti sullo stesso asse lasciano in mezzo una
+    riga bianca di antialiasing.
+
+    Chi sposta un vertice ricalcoli anche gli altri: gli estremi degli archi
+    sono centro + r·(cos θ, sin θ) con θ misurato con la y verso il basso, e i
+    due bordi della diagonale sono la stessa retta traslata di ±27.
+  -->
+  <defs>
+    <path id="due" d="
+      M 155.4 262.9
+      A 111 111 0 0 1 146.7 235.3
+      Q 136 226 128 216
+      Q 136 206 146.7 196.7
+      A 111 111 0 1 1 327.2 301.2
+      L 285.6 336
+      L 380 336
+      L 380 392
+      L 132 392
+      L 132 336
+      L 201.4 336
+      L 292.6 259.7
+      A 57 57 0 1 0 223.6 262.9
+      L 189.5 275
+      Z" />
+    <clipPath id="sinistra"><rect x="-200" y="-200" width="456.6" height="1000" /></clipPath>
+    <clipPath id="destra"><rect x="256" y="-200" width="600" height="1000" /></clipPath>
+  </defs>
+
+  <!-- sfondo bianco; l'angolo smussato serve alle icone, che sono quadrate -->
+  <rect width="512" height="512" rx="96" fill="#FFFFFF" />
+
+  <!-- Il disegno nasce comodo e viene poi portato a riempire il quadrato: con
+       i margini che aveva, a sedici pixel restavano tre pixel di segno. -->
+  <g transform="translate(256 256) scale(1.27) translate(-256 -268.5)">
+    <!-- il foglio dell'anteprima, dietro alla barra -->
+    <rect x="96" y="350" width="320" height="82" rx="16" fill="#E9EFF8" />
+    <use href="#due" fill="#12295C" clip-path="url(#sinistra)" />
+    <use href="#due" fill="#00C2EE" clip-path="url(#destra)" />
+  </g>
+</svg>

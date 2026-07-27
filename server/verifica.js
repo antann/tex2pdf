@@ -206,6 +206,27 @@ prova('il disegno del logo è uno solo, e da lì passano finestra, installer e f
   assert.ok(existsSync(path.join(RADICE, 'public', 'logo.svg')), 'manca il disegno di partenza')
 })
 
+prova('la selezione della pubblicazione porta con sé ciò che il codice pretende', () => {
+  // `publish.json` è un elenco a inclusione, e non è pubblicato: un file nuovo
+  // resta indietro in silenzio, e il guasto si vede solo sulla repository
+  // pubblica, dove il codice che lo cerca è arrivato e lui no. Qui non c'è:
+  // nella copia pubblica questa verifica non ha nulla da controllare.
+  const percorso = path.join(RADICE, 'publish.json')
+  if (!existsSync(percorso)) return
+
+  const config = JSON.parse(readFileSync(percorso, 'utf8'))
+  // `escludi` è la seconda rete e vince su `includi`: un file nominato di là
+  // non viene pubblicato per quanto lo si includa di qua.
+  const glob = (modello) =>
+    new RegExp(`^${modello.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*\*/g, '.*').replace(/(?<!\.)\*/g, '[^/]*')}$`)
+  const coperto = (file) =>
+    config.includi.some((m) => glob(m).test(file)) && !config.escludi.some((m) => glob(m).test(file))
+
+  for (const file of ['public/logo.svg', 'risorse/icona.ico', 'scripts/genera-icone.cjs']) {
+    assert.ok(coperto(file), `${file} non finirebbe nella repository pubblica`)
+  }
+})
+
 prova('l’icona generata è un .ico vero e contiene le misure piccole', () => {
   // Un file corrotto o troncato non fa fallire electron-builder: costruisce
   // l'installer e mette l'icona di Electron, e la differenza si vede solo a
