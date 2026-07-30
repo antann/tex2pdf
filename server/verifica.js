@@ -238,6 +238,9 @@ prova('la selezione della pubblicazione porta con sé ciò che il codice pretend
   // una repository sola, e chi clona la pubblica non ha né i permessi né
   // motivo di lanciarlo.
   assert.ok(!coperto('deploy.bat'), 'deploy.bat è uno strumento del manutentore e non va pubblicato')
+  // `includi` porta `docs/**` in blocco: la guida al rilascio va tolta per
+  // nome, o finisce di là a spiegare comandi che di là non esistono.
+  assert.ok(!coperto('docs/guida_al_rilascio.md'), 'la guida al rilascio descrive la repository privata')
 })
 
 prova('l’icona generata è un .ico vero e contiene le misure piccole', () => {
