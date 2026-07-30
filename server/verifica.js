@@ -182,6 +182,14 @@ prova('il pacchetto dichiara tutto ciò che serve a far partire la finestra', ()
     assert.ok(pacchetto.build.files.includes(atteso), `il pacchetto non include ${atteso}`)
   }
   assert.equal(pacchetto.build.asar, false, 'con l’asar il motore non è eseguibile e gli ESM non si caricano')
+
+  // `deploy.bat` cerca l'installer e lo zip, e se ne manca uno si ferma a
+  // costruzione finita, cioè dopo alcuni minuti. Il target tolto qui si
+  // scoprirebbe solo lì.
+  const bersagli = pacchetto.build.win.target.map((uno) => uno.target ?? uno)
+  for (const atteso of ['nsis', 'zip']) {
+    assert.ok(bersagli.includes(atteso), `manca il target win ${atteso}, che il rilascio allega`)
+  }
 })
 
 prova('il disegno del logo è uno solo, e da lì passano finestra, installer e favicon', () => {
@@ -222,9 +230,14 @@ prova('la selezione della pubblicazione porta con sé ciò che il codice pretend
   const coperto = (file) =>
     config.includi.some((m) => glob(m).test(file)) && !config.escludi.some((m) => glob(m).test(file))
 
-  for (const file of ['public/logo.svg', 'risorse/icona.ico', 'scripts/genera-icone.cjs']) {
+  for (const file of ['public/logo.svg', 'risorse/icona.ico', 'scripts/genera-icone.cjs', 'diagnostica.bat']) {
     assert.ok(coperto(file), `${file} non finirebbe nella repository pubblica`)
   }
+
+  // Il verso opposto: `deploy.bat` allega i binari a una release che sta su
+  // una repository sola, e chi clona la pubblica non ha né i permessi né
+  // motivo di lanciarlo.
+  assert.ok(!coperto('deploy.bat'), 'deploy.bat è uno strumento del manutentore e non va pubblicato')
 })
 
 prova('l’icona generata è un .ico vero e contiene le misure piccole', () => {

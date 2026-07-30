@@ -43,6 +43,7 @@ avvia.bat              apre l'applicazione, con ricarica automatica
 avvia.bat --build      apre l'applicazione sull'interfaccia compilata
 avvia.bat --browser    apre nel browser: interfaccia 5173, compilatore 4180
 arresta.bat            ferma tutto
+diagnostica.bat        controlla che ci sia tutto, senza modificare niente
 ```
 
 Al primo avvio `avvia.bat` installa da sé le dipendenze — Electron compreso,
@@ -68,20 +69,30 @@ l'indirizzo del server locale, non una copia dei file. Le uniche differenze
 sono il menu e i dialoghi di apertura e salvataggio, che nel browser diventano
 il consueto scaricamento.
 
-## Costruire l'installer (Windows)
+## Costruire i pacchetti (Windows)
 
 ```bash
 npm run dist
 ```
 
-Produce `installer\TEX2PDF Setup <versione>.exe`. Prima di lanciarlo serve il
-motore in `motore\tectonic.exe` — `installa-motore.bat` lo scarica — perché
-viene incluso nell'installer: chi riceve il pacchetto non deve procurarselo.
-Il comando si ferma con un messaggio se manca il motore o l'interfaccia
-compilata, invece di produrre un installer monco.
+Produce in `installer\` due file: `TEX2PDF Setup <versione>.exe`, che installa,
+e `TEX2PDF-<versione>-win.zip`, che si estrae dove si vuole e si avvia da lì,
+senza installazione e senza privilegi di amministratore — utile su una chiavetta
+o dove non si può installare nulla. Anche estratta, l'applicazione scrive i
+propri file in `%APPDATA%\TEX2PDF`: la cartella estratta resta com'è.
 
-L'installer va costruito sul sistema di destinazione: `electron-builder` non
+Prima di lanciarlo serve il motore in `motore\tectonic.exe` —
+`installa-motore.bat` lo scarica — perché viene incluso in entrambi i pacchetti:
+chi li riceve non deve procurarselo. Il comando si ferma con un messaggio se
+manca il motore o l'interfaccia compilata, invece di produrre un pacchetto
+monco.
+
+I pacchetti vanno costruiti sul sistema di destinazione: `electron-builder` non
 compila per piattaforme diverse dalla propria.
+
+Gli eseguibili pubblicati non sono firmati: alla release è allegato
+`SHA256SUMS.txt`, che permette di controllare che il file scaricato sia quello
+pubblicato.
 
 Una volta installata, l'applicazione tiene il codice e i template nella cartella
 d'installazione, che resta di sola lettura, e scrive tutto il resto — cartella di
@@ -172,6 +183,14 @@ lavoro/      cartella di lavoro e immagini caricate
 ricrea con `installa-motore.bat`, la seconda alla compilazione successiva.
 
 ## Quando qualcosa non va
+
+```
+diagnostica.bat
+```
+
+Controlla ambiente, file del progetto, motore, template, dipendenze e porte, e
+per ogni cosa che manca dice come rimediare. Non modifica niente: si può
+lanciare a occhi chiusi prima di chiedere aiuto.
 
 **«Motore assente» nella barra di stato.** Manca `motore\tectonic.exe`: esegui
 `installa-motore.bat`. Nell'applicazione installata il motore è già incluso; se

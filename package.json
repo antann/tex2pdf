@@ -1,6 +1,6 @@
 {
   "name": "tex2pdf",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Compilazione di documenti LaTeX in PDF tramite template",
   "license": "MIT",
@@ -79,6 +79,12 @@
       "target": [
         {
           "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
           "arch": [
             "x64"
           ]

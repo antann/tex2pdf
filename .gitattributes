@@ -4,6 +4,17 @@
 * text=auto
 
 ###############################################################################
+# I file .bat vogliono CRLF sul disco, sempre.
+#
+# Con le sole LF, cmd sbaglia la ricerca delle etichette dopo un "call": ogni
+# salto a un errore finisce in "Impossibile trovare l'etichetta batch", e il
+# guasto non ha nulla a che vedere con quello che si stava facendo. Con
+# "text=auto" la conversione dipende da core.autocrlf di chi clona: qui non
+# si lascia alla configurazione locale.
+###############################################################################
+*.bat text eol=crlf
+
+###############################################################################
 # Set default behavior for command prompt diff.
 #
 # This is need for earlier builds of msysgit that does not have it on by

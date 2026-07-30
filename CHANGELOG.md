@@ -2,7 +2,7 @@
 
 Le voci descrivono ciò che cambia per chi usa il programma.
 
-## Non ancora pubblicato
+## 1.2.0 — 31 luglio 2026
 
 ### Aggiunto
 
@@ -12,6 +12,19 @@ Le voci descrivono ciò che cambia per chi usa il programma.
   fianco sinistro il profilo esce in una punta: è la vita di una graffa. Lo
   stesso disegno è la favicon nella scheda del browser, l'icona della finestra
   e quella dell'installer.
+- **Archivio zip per Windows**, accanto all'installer, fra gli allegati della
+  release: si estrae in una cartella qualsiasi e si avvia da lì, senza
+  installazione e senza privilegi di amministratore. Utile su una chiavetta o
+  dove non si può installare nulla. Il motore è dentro anche in questo caso.
+  L'applicazione estratta continua a scrivere i propri file in
+  `%APPDATA%\TEX2PDF`, come quella installata: la cartella estratta resta
+  com'è, e disinstallare vuol dire cancellarla.
+- `SHA256SUMS.txt` fra gli allegati: gli eseguibili non sono firmati, e il
+  checksum è la verifica che resta per controllare che il file scaricato sia
+  quello pubblicato.
+- **`diagnostica.bat`** — controlla ambiente, file del progetto, motore,
+  template, dipendenze e porte, e per ogni cosa che manca dice come rimediare.
+  Non modifica niente.
 
 ## 1.1.0 — 28 luglio 2026
 

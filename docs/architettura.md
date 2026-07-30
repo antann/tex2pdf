@@ -38,6 +38,8 @@ scripts/
   genera-icone.cjs  da public/logo.svg alle icone (npm run icone)
   pubblica.mjs      pubblicazione di una versione
 
+diagnostica.bat   che cosa manca all'installazione; non modifica niente
+
 public/logo.svg   il disegno del logo, unico
 risorse/          icona della finestra e dell'installer, generate da lì
 template/<slug>/  i template — vedi template.md
